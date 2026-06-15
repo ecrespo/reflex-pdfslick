@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reflex-pdfslick"
+version = "0.0.1"
+description = "A native Reflex component wrapping PDFSlick (PDF.js + Zustand) to view and interact with PDF documents in pure Python."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [{ name = "Ernesto Crespo", email = "ecrespo@gmail.com" }]
+keywords = [
+    "reflex",
+    "pdf",
+    "pdfslick",
+    "pdfjs",
+    "pdf-viewer",
+    "component",
+    "viewer",
+    "thumbnails",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Framework :: AsyncIO",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "reflex>=0.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "build",
+]
+
+[project.urls]
+Homepage = "https://github.com/ecrespo/reflex-pdfslick"
+Repository = "https://github.com/ecrespo/reflex-pdfslick"
+Issues = "https://github.com/ecrespo/reflex-pdfslick/issues"
+Documentation = "https://github.com/ecrespo/reflex-pdfslick#readme"
+Changelog = "https://github.com/ecrespo/reflex-pdfslick/releases"
+"PyPI" = "https://pypi.org/project/reflex-pdfslick/"
+"PDFSlick" = "https://pdfslick.dev/"
+
+[tool.setuptools.packages.find]
+where = ["custom_components"]
+
+[tool.setuptools.package-data]
+reflex_pdfslick = ["js/*.tsx", "js/*.jsx", "js/*.js"]
+
+[tool.pytest.ini_options]
+pythonpath = ["custom_components"]
+testpaths = ["tests"]
+addopts = "-q"
