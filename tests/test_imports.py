@@ -24,10 +24,8 @@ def test_factory_is_component_create():
     assert rp.pdf_slick == rp.PdfSlick.create
 
 
-def test_phase0_create_raises_not_implemented():
-    # Phase-0 contract: the runtime wrapper lands in Phase 1, so creating the
-    # component raises a clear NotImplementedError until then.
-    import pytest
-
-    with pytest.raises(NotImplementedError):
-        rp.pdf_slick(url="/sample.pdf")
+def test_create_builds_a_component():
+    # Phase 1+: the runtime wrapper is wired, so creating the component yields a
+    # real Reflex component (the Phase-0 NotImplementedError guard is gone).
+    component = rp.pdf_slick(url="/sample.pdf")
+    assert isinstance(component, rp.PdfSlick)

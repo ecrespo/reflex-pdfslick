@@ -22,12 +22,11 @@ imperative API into Reflex's declarative, state-driven model: document state
 Python as events, and Python triggers actions (go to page, zoom, rotate, print,
 download) on the viewer.
 
-> **Project status — `ALPHA` / specification-first.**
-> This repository currently contains the full **Spec-Driven Design (SDD)**
-> documentation set, the package scaffold, and the demo-app skeleton. The
-> component runtime and the example gallery are delivered incrementally per the
-> [implementation plan](specs/plans/implementation-plan.md). See
-> [Roadmap](#roadmap) for what is and isn't built yet.
+> **Project status — `ALPHA` / implemented, pre-release.**
+> The component runtime, imperative controls, and the full 7-example demo
+> gallery are built and covered by tests; the demo compiles to a Reflex
+> production build in CI. The remaining step is the PyPI/GitHub release. See
+> [Roadmap](#roadmap) for details.
 
 ```python
 import reflex as rx
@@ -91,9 +90,34 @@ pip install -e .
 ```
 
 Reflex installs the underlying npm packages automatically on first run. The
-component pins `@pdfslick/react` (which pulls in `@pdfslick/core`, `pdfjs-dist`
-and `zustand`) and imports the required stylesheet
+component pins `@pdfslick/react` and `pdfjs-dist` (which pull in
+`@pdfslick/core` and `zustand`) and imports the required stylesheet
 `@pdfslick/react/dist/pdf_viewer.css` for you.
+
+## Custom-component packaging (build & publish)
+
+This repository is a standard [Reflex custom
+component](https://reflex.dev/docs/custom-components/overview/): the package
+lives in `custom_components/reflex_pdfslick/` (shipping the `PdfSlickWrapper.tsx`
+wrapper and a generated `pdfslick.pyi` stub), the demo app in `pdfslick_demo/`,
+and `pyproject.toml` carries the `reflex-custom-components` keyword used by the
+Reflex component gallery to discover it on PyPI.
+
+```shell
+# Build the wheel + sdist into dist/ (also regenerates the .pyi type stubs).
+# PYTHONPATH=. lets the stub generator import custom_components/.
+PYTHONPATH=. uv run reflex component build
+
+# Inspect, then publish to PyPI (bump the version in pyproject.toml first):
+uv run twine upload dist/*        # or: uv publish
+
+# Share on the Reflex community gallery:
+uv run reflex component share
+```
+
+The built wheel includes the React wrapper (`reflex_pdfslick/PdfSlickWrapper.tsx`)
+and the type stub, so `rx.asset(...)` resolves the wrapper when the package is
+installed from PyPI — not only in editable mode.
 
 ## Planned API (summary)
 
@@ -178,16 +202,20 @@ source of truth:
 
 ## Roadmap
 
-- [x] **Phase 0 — Foundation & SDD** *(this commit)*: repository, packaging,
-      SDD artifacts, README, demo skeleton.
-- [ ] **Phase 1 — Core wrapper**: `PdfSlickWrapper.tsx`, `pdf_slick` component,
+- [x] **Phase 0 — Foundation & SDD**: repository, packaging, SDD artifacts,
+      README, demo skeleton.
+- [x] **Phase 1 — Core wrapper**: `PdfSlickWrapper.tsx`, `pdf_slick` component,
       props, CSS import, NoSSR.
-- [ ] **Phase 2 — Events & state bridge**: page/scale/load/error events.
-- [ ] **Phase 3 — Imperative controls**: navigation, zoom, rotation, modes,
-      print, download.
-- [ ] **Phase 4 — Thumbnails & multi-document**.
-- [ ] **Phase 5 — Demo gallery** (all examples) **& docs polish**.
-- [ ] **Phase 6 — Tests, CI, PyPI release**.
+- [x] **Phase 2 — Events & state bridge**: page/scale/load/error/metadata events.
+- [x] **Phase 3 — Imperative controls**: navigation, zoom, rotation, modes,
+      print, download (declarative `command` prop + `commands` helpers).
+- [x] **Phase 4 — Thumbnails & multi-document**: vertical/horizontal thumbnails,
+      independent multi-instance viewers.
+- [x] **Phase 5 — Demo gallery** (all 7 examples) **& docs polish**.
+- [x] **Phase 6 — Tests & CI**: 35 unit tests, GitHub Actions (pytest 3.10–3.13,
+      TSX transpile, demo build smoke). Demo compiles to a Reflex production build.
+- [ ] **Release** — PyPI publish + tagged GitHub release *(awaiting maintainer
+      credentials)*.
 
 ## Credits
 

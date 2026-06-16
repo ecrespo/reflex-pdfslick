@@ -12,6 +12,9 @@ requires-python = ">=3.10"
 authors = [{ name = "Ernesto Crespo", email = "ecrespo@gmail.com" }]
 keywords = [
     "reflex",
+    # Required for discovery on the Reflex custom-component gallery (the gallery
+    # indexes PyPI packages carrying this keyword). Do not remove.
+    "reflex-custom-components",
     "pdf",
     "pdfslick",
     "pdfjs",
@@ -36,6 +39,7 @@ dependencies = [
 dev = [
     "pytest>=8.0",
     "build",
+    "twine",
 ]
 
 [project.urls]
@@ -51,9 +55,9 @@ Changelog = "https://github.com/ecrespo/reflex-pdfslick/releases"
 where = ["custom_components"]
 
 [tool.setuptools.package-data]
-reflex_pdfslick = ["js/*.tsx", "js/*.jsx", "js/*.js"]
+reflex_pdfslick = ["*.tsx", "*.jsx", "*.js", "*.pyi"]
 
 [tool.pytest.ini_options]
-pythonpath = ["custom_components"]
+pythonpath = ["custom_components", "pdfslick_demo"]
 testpaths = ["tests"]
 addopts = "-q"

@@ -98,16 +98,24 @@ prop/event API, then wrap *that*. This is the approach adopted here.
 |---|---|---|
 | Python API | `pdfslick.py` (`PdfSlick`, `pdf_slick`) | Declares props, events, imports; NoSSR. |
 | Python types | `options.py`, `models.py` | `PdfSlickOptions` (PropsBase), enums. |
-| JS wrapper | `js/PdfSlickWrapper.tsx` | Calls `usePDFSlick`, renders viewer/thumbs, subscribes to store, emits callbacks, imports CSS. |
+| JS wrapper | `PdfSlickWrapper.tsx` | Calls `usePDFSlick`, renders viewer/thumbs, subscribes to store, emits callbacks, applies `command`, imports CSS. |
 | Demo | `pdfslick_demo/` | Reproduces the 7 examples. |
 
 ### 4.3 Reflex wiring (Phase 1)
 
+> **Implementation note (as built):** the wrapper lives beside `pdfslick.py`
+> as `PdfSlickWrapper.tsx` (not under `js/`). Reflex's `rx.asset(shared=True)`
+> only `mkdir`s the asset subfolder, not a nested path segment, so a nested
+> `rx.asset("js/PdfSlickWrapper.tsx")` fails to symlink during the build; a
+> bare filename resolves cleanly. The library path uses
+> `rx.asset(...).importable_path`, which already yields `$/public/...`.
+
 ```python
 class PdfSlick(rx.NoSSRComponent):
-    _wrapper = rx.asset("./js/PdfSlickWrapper.tsx", shared=True)
-    library = f"$/public{_wrapper}"          # local source module
+    _wrapper = rx.asset("PdfSlickWrapper.tsx", shared=True)
+    library = _wrapper.importable_path        # "$/public/.../PdfSlickWrapper.tsx"
     tag = "PdfSlickWrapper"
+    is_default = True
     lib_dependencies = ["@pdfslick/react@4.0.0"]
 
     url: rx.Var[str]
@@ -203,7 +211,11 @@ Detailed plan in `../plans/implementation-plan.md` and `../tasks/task-breakdown.
 
 ## 8. Open Questions
 
-1. Final imperative-control mechanism (command prop vs imperative handle).
+1. ~~Final imperative-control mechanism~~ — **Resolved:** declarative `command`
+   prop, applied apply-once in the wrapper (`commands.py` helpers build the
+   objects). See `../api/component-api.md` §4.
 2. Whether to expose a small Python `PdfSlickState` mixin that pre-wires common
-   events for convenience.
-3. ArrayBuffer/base64 loading ergonomics (prop vs dedicated loader event).
+   events for convenience. (The demo's `ViewerState` is a working template.)
+3. ArrayBuffer/base64 loading ergonomics (prop vs dedicated loader event) — the
+   `url` prop accepts served assets / data URLs today; a dedicated bytes loader
+   remains a future enhancement.

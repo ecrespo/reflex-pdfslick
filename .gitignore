@@ -16,6 +16,8 @@ venv/
 *.db
 .states/
 reflex.lock
+# Generated symlinks for shared assets (rx.asset(shared=True))
+assets/external/
 
 # Node
 node_modules/

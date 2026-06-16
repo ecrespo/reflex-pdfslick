@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Python unit tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Install package + test deps
+        run: uv pip install --system -e . pytest "reflex>=0.9.0"
+
+      - name: Run unit tests
+        run: pytest
+
+  wrapper-syntax:
+    name: TSX wrapper builds
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Validate PdfSlickWrapper.tsx transpiles
+        # Transform-only (no --bundle): validates TS/TSX syntax without resolving
+        # imports, since the wrapper uses Vite-only specifiers (e.g. `?url`).
+        run: |
+          npx -y esbuild@0.24.0 \
+            custom_components/reflex_pdfslick/PdfSlickWrapper.tsx \
+            --jsx=automatic \
+            --format=esm > /tmp/wrapper.js
+
+  demo-build:
+    name: Demo frontend build (smoke)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install package
+        run: uv pip install --system -e . "reflex>=0.9.0"
+
+      - name: Compile demo frontend
+        working-directory: pdfslick_demo
+        run: reflex export --frontend-only --no-zip
