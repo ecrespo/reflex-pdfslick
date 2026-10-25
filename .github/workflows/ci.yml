@@ -5,6 +5,11 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_call:
+
+env:
+  # Force JavaScript actions onto the Node 24 runtime.
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   test:
@@ -13,18 +18,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.11", "3.12", "3.13"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v10.3.2
 
       - name: Set up Python ${{ matrix.python-version }}
         run: uv python install ${{ matrix.python-version }}
 
       - name: Install package + test deps
-        run: uv pip install --system -e . pytest "reflex>=0.9.0"
+        run: uv pip install --system -e . pytest "reflex>=0.10.0"
 
       - name: Run unit tests
         run: pytest
@@ -33,11 +38,11 @@ jobs:
     name: TSX wrapper builds
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: "20"
+          node-version: "24"
 
       - name: Validate PdfSlickWrapper.tsx transpiles
         # Transform-only (no --bundle): validates TS/TSX syntax without resolving
@@ -53,17 +58,17 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v10.3.2
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: "20"
+          node-version: "24"
 
       - name: Install package
-        run: uv pip install --system -e . "reflex>=0.9.0"
+        run: uv pip install --system -e . "reflex>=0.10.0"
 
       - name: Compile demo frontend
         working-directory: pdfslick_demo

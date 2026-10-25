@@ -121,7 +121,7 @@ without a running frontend; integration is validated in the demo build.
 |---|
 | Python unit tests (enums, options serialization, imports, prop/event surface). |
 | GitHub Actions: lint + pytest + demo build smoke test. |
-| `reflex component build`; publish to PyPI (`twine`/`uv`). |
+| `uv build` (`reflex component build` before Reflex 0.10); publish to PyPI via the tag-driven `publish.yml` workflow. |
 | Tagged GitHub release; README badges live. |
 
 **Exit:** green CI; `pip install reflex-pdfslick` works.
@@ -141,7 +141,7 @@ Phases 2 and 3 can partially overlap once Phase 1 stabilizes the wrapper.
 |---|---|
 | PDF.js worker mismatch in Reflex bundler | Validate in Phase 1 demo build; document `workerSrc` override. |
 | ESM-only pdf.js v6 bundling | Keep wrapper minimal; test build early. |
-| Reflex API drift across 0.9.x | Pin a known-good Reflex range in demo `requirements.txt`. |
+| Reflex API drift across minor releases (0.9 → 0.10) | Pin a known-good Reflex range in demo `requirements.txt`. |
 
 ## 6. Definition of Done (project)
 

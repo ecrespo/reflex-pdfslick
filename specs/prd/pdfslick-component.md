@@ -144,7 +144,8 @@ the component must support:
 
 - `@pdfslick/react@4.0.0` → `@pdfslick/core@4.0.0` → `pdfjs-dist@^6.0.227`,
   `zustand@^5`. React peer `>=17`.
-- Reflex `>=0.9.0` (current line; component-wrapping + `NoSSRComponent` API).
+- Reflex `>=0.10.0` (current line; component-wrapping + `NoSSRComponent` API).
+- Python `>=3.11` (Reflex 0.10 dropped Python 3.10).
 - The PDF.js worker version must match the bundled `pdfjs-dist` version.
 
 ## 9. Risks

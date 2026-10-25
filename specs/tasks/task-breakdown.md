@@ -106,7 +106,7 @@ Legend: ☑ done · ☐ pending · ◐ in progress
 | F6-02 | Unit tests: `PdfSlickOptions` snake→camel serialization | 0.5h | F0-06 | ☑ |
 | F6-03 | Unit tests: import surface + prop/event presence | 0.5h | F1-04 | ☑ |
 | F6-04 | GitHub Actions: lint + pytest + demo build smoke | 1h | F6-03 | ☑ |
-| F6-05 | `reflex component build` + PyPI publish | 0.5h | F6-04 | ☐ (needs maintainer PyPI credentials) |
+| F6-05 | Package build + PyPI publish (`publish.yml` on `vX.Y.Z` tag) | 0.5h | F6-04 | ☑ (0.0.1, 0.1.0) |
 | F6-06 | Tag GitHub release; verify badges | 0.25h | F6-05 | ☐ (needs maintainer release access) |
 
 **Done (engineering):** green CI; demo compiles to a Reflex production build.

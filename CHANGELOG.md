@@ -6,6 +6,37 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-24
+
+### Changed
+- **Reflex 0.10:** the package now requires `reflex>=0.10.0` (was `>=0.9.0`).
+  The component-wrapping API is unchanged; the wrapper, events and commands work
+  as-is on Reflex 0.10 (React 19, React Router 8, Vite 8 frontend).
+- **Python >= 3.11:** dropped Python 3.10 to match Reflex 0.10's own
+  `requires-python`. Added explicit 3.11/3.12/3.13 trove classifiers.
+- Build backend requirement raised to `setuptools>=78.1.1`.
+- Packaging docs: the `reflex component build/share` CLI was removed in
+  Reflex 0.10; the README now documents `uv build` + `twine check` and stub
+  regeneration via `python -m reflex_base.utils.pyi_generator`. The committed
+  `pdfslick.pyi` was regenerated with Reflex 0.10 (no changes).
+- Added the `reflex-component` PyPI keyword (used by Reflex's component
+  template) alongside `reflex-custom-components`.
+- Demo `requirements.txt` now requires `reflex>=0.10.0`.
+- Docs: README gains a *Requirements* table and an *Automated release* section;
+  specs updated from Next.js / `next/dynamic` to Reflex's current React Router +
+  Vite output (`ClientSide(() => import(...))` for `NoSSRComponent`).
+
+### CI
+- All workflows run on **Node 24** (`actions/setup-node` `node-version: "24"`)
+  and use the current major versions of `actions/checkout`, `actions/setup-node`
+  and `astral-sh/setup-uv`.
+- Test matrix: Python 3.11–3.13.
+- New `publish.yml` workflow: on a `vX.Y.Z` tag pointing at `main`, verifies the
+  tag matches the package version, runs the tests, builds sdist + wheel,
+  publishes to PyPI and creates the GitHub Release.
+
+## [0.0.1] - 2026-06-15
+
 ### Added — Phase 0 (Foundation & SDD)
 - Repository scaffold: `custom_components/`, `specs/`, `tests/`, `pdfslick_demo/`.
 - Packaging: `pyproject.toml`, `LICENSE` (MIT), `.gitignore`, `README.md`.
@@ -42,7 +73,7 @@ adheres to [Semantic Versioning](https://semver.org/).
   `error`), each a unit-tested pure builder in `examples.py`.
 - **Tests & CI (Phase 6):** 35 Python unit tests (enums, options, component
   wiring, events, command serialization, thumbnails, demo builders); GitHub
-  Actions running pytest across Python 3.10–3.13, an esbuild TSX-transpile
+  Actions running pytest across Python 3.10–3.13 (3.11–3.13 since 0.1.0), an esbuild TSX-transpile
   check, and a Reflex demo frontend-build smoke job.
 
 ### Fixed
@@ -70,4 +101,6 @@ adheres to [Semantic Versioning](https://semver.org/).
   --frontend-only`): `@pdfslick/react@4.0.0` resolves, the local wrapper is
   bundled, and the Next.js production build succeeds.
 
-[Unreleased]: https://github.com/ecrespo/reflex-pdfslick/commits/main
+[Unreleased]: https://github.com/ecrespo/reflex-pdfslick/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/ecrespo/reflex-pdfslick/compare/v0.0.1...v0.1.0
+[0.0.1]: https://github.com/ecrespo/reflex-pdfslick/releases/tag/v0.0.1
