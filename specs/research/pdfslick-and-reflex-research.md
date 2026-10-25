@@ -107,14 +107,17 @@ The demo gallery reproduces 7 of these (Comments deferred).
 
 ## 6. Reflex wrapping findings
 
-- Current Reflex: **0.9.5.post2** (Jun 2026); 0.9.x component-wrapping API.
+- Current Reflex: **0.10.0** (Oct 2026; requires Python >= 3.11). The
+  component-wrapping API used here is unchanged from 0.9.x. (Originally
+  researched against 0.9.5.post2, Jun 2026.)
 - Wrap with `rx.Component` / `rx.NoSSRComponent`: `library`, `tag`,
   `lib_dependencies`, `is_default`, `alias`. Pin versions in `library`/`lib_dependencies`.
 - Props are `rx.Var[...]`; snake_case auto-camelCased; `rx.PropsBase` auto-camelCases
   structured props; `_rename_props` handles reserved names (e.g. `style`).
 - Events: modern `rx.EventHandler[spec]` with lambda specs (`lambda e0: [e0]`),
   or helpers like `rx.event.passthrough_event_spec(int)`.
-- **NoSSR:** `rx.NoSSRComponent` emits `next/dynamic(..., {ssr:false})`. Required
+- **NoSSR:** `rx.NoSSRComponent` emits a client-only lazy import
+  (`ClientSide(() => import(...))`). Required
   for PDF.js (browser-only).
 - CSS/assets: `add_imports({"": "pkg/dist/file.css"})`; `add_custom_code`,
   `add_hooks`, `add_style`; static via `assets/` and `rx.asset(..., shared=True)`.
@@ -125,6 +128,9 @@ The demo gallery reproduces 7 of these (Comments deferred).
 - Custom-component project: `reflex component init` → `custom_components/`,
   demo app, `pyproject.toml`; build with `reflex component build`; publish via
   `twine`/`uv` (Reflex does not publish for you).
+  **Update (Reflex 0.10):** `reflex component` was removed; packages are built
+  with `uv build`, stubs via `python -m reflex_base.utils.pyi_generator`, and
+  Reflex points new projects at `reflex-dev/component-template`.
 
 ## 7. Key references
 

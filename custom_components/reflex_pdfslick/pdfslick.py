@@ -9,13 +9,14 @@ renders
 selectors, and exposes a clean prop/event API. See
 ``specs/technical/architecture.md`` for the full rationale.
 
-Wiring (Reflex 0.9.x):
+Wiring (Reflex 0.10.x):
 
 - ``library`` points at the local wrapper via ``rx.asset(..., shared=True)``'s
   ``$/public`` importable path; the npm package is declared in
   ``lib_dependencies`` so Reflex installs it.
 - PDF.js is browser-only (touches ``window``/``document``/canvas), so the
-  component is a ``rx.NoSSRComponent`` (emits ``next/dynamic(..., {ssr:false})``).
+  component is a ``rx.NoSSRComponent`` (emits a client-only lazy import,
+  ``ClientSide(() => import(...))``).
 - The required stylesheet ``@pdfslick/react/dist/pdf_viewer.css`` is imported
   once via ``add_imports``.
 """
