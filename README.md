@@ -145,8 +145,9 @@ git push origin v0.1.0
 ```
 
 The workflow checks that the tag matches the package version, runs the tests,
-builds the sdist + wheel and uploads them to PyPI (Trusted Publishing / OIDC,
-or a `PYPI_API_TOKEN` repository secret), then creates the GitHub Release.
+builds the sdist + wheel and uploads them to PyPI via Trusted Publishing (OIDC,
+no stored token), then creates the GitHub Release. Third-party actions are
+pinned to commit SHAs.
 
 The built wheel includes the React wrapper (`reflex_pdfslick/PdfSlickWrapper.tsx`)
 and the type stub, so `rx.asset(...)` resolves the wrapper when the package is
